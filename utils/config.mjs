@@ -2,7 +2,7 @@ import rateLimit from "express-rate-limit";
 import validator from "validator";
 import 'dotenv/config';
 
-export const { PORT, NODE_ENV, JWT_SECRET } = process.env;
+export const { NODE_ENV, JWT_SECRET } = process.env;
 
 export const mongoServerAddress = "mongodb://localhost:27017/newsexplorer";
 
