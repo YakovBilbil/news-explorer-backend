@@ -20,8 +20,7 @@ router.post("/", celebrate({
         date: Joi.string().required().isoDate(),
         source: Joi.string().required(),
         link: Joi.string().required().custom(validateURL),
-        image: Joi.string().required().custom(validateURL),
-        owner: myJoiObjectId().required()
+        image: Joi.string().required().custom(validateURL)
     })
 }), createArticle);
 

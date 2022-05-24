@@ -42,7 +42,9 @@ const createArticle = async(req, res) => {
                 message: "invalid data passed to the methods for creating an article",
             });
         } else {
-            res.send(newArticle);
+            const newArticleToSend = newArticle.toObject()
+            delete newArticleToSend.owner
+            res.send(newArticleToSend);
         }
     } catch (error) {
         handleCatchErrors(error, res);
