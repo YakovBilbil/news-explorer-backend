@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import { AuthError, handleCatchErrors } from "../utils/errorsHandle.mjs";
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -23,16 +24,20 @@ const userSchema = new mongoose.Schema({
 
 
 const findUserByCredentials = async function(email, password) {
-    const user = await this.findOne({ email }).select("+password");
-    if (!user) {
-        return Promise.reject(new Error('Incorrect email or password'));
-    } else {
-        const matched = bcrypt.compare(password, user.password);
-        if (!matched) {
-            return Promise.reject(new Error('Incorrect email or password'));
+    try {
+        const user = await this.findOne({ email }).select("+password");
+        if (!user) {
+            return Promise.reject(new AuthError);
         } else {
-            return user;
+            const matched = await bcrypt.compare(password, user.password);
+            if (!matched) {
+                return Promise.reject(new AuthError);
+            } else {
+                return user;
+            }
         }
+    } catch (error) {
+        handleCatchErrors(error);
     }
 };
 

@@ -25,17 +25,7 @@ router.post("/", celebrate({
 }), createArticle);
 
 router.delete("/:article_id", celebrate({
-    headers: Joi.object().keys({}).unknown(true),
-    body: Joi.object().keys({
-        keyword: Joi.string().required(),
-        title: Joi.string().required(),
-        text: Joi.string().required(),
-        date: Joi.string().required().isoDate(),
-        source: Joi.string().required(),
-        link: Joi.string().required().custom(validateURL),
-        image: Joi.string().required().custom(validateURL),
-        owner: myJoiObjectId().required()
-    })
+    headers: Joi.object().keys({}).unknown(true)
 }), deleteArticleById);
 
 

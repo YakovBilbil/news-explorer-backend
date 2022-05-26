@@ -7,11 +7,16 @@ import {
     handleCatchErrors
 } from "../utils/errorsHandle.mjs";
 import User from "../models/user.mjs";
-import { NotFoundError } from "../utils/errorsHandle.mjs";
+import { AlreadyExistError, NotFoundError } from "../utils/errorsHandle.mjs";
+import { crossOriginResourcePolicy } from "helmet";
 
 
 const createUser = async(req, res) => {
     try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user) {
+            throw new AlreadyExistError;
+        }
         const hash = await bcrypt.hash(req.body.password, 10);
         const newUser = await User.create({
             email: req.body.email,
@@ -23,7 +28,9 @@ const createUser = async(req, res) => {
                 message: "invalid data passed to the methods for creating a user",
             });
         } else {
-            res.send(newUser);
+            const newUserToSend = newUser.toObject();
+            delete newUserToSend.password;
+            res.send(newUserToSend);
         }
     } catch (error) {
         handleCatchErrors(error, res);
@@ -36,11 +43,13 @@ const login = async(req, res) => {
     try {
         const user = await User.findUserByCredentials(email, password);
         if (!user) {
-            throw new AuthError('authentication Error');
+            throw new AuthError("authentication Error");
         }
         const token = jwt.sign({ _id: user._id }, NODE_ENV === "production" ? JWT_SECRET : "dev-secret", { expiresIn: "7d" });
         res.json({ token });
-    } catch (next) {}
+    } catch (error) {
+        handleCatchErrors(error, res);
+    }
 };
 
 
@@ -48,7 +57,7 @@ const getUserData = async(req, res) => {
     try {
         const user = await User.findOne({ _id: req.user._id });
         if (!user) {
-            throw new NotFoundError('No user with matching ID found');
+            throw new NotFoundError("No user with matching ID found");
         }
         res.send(user);
     } catch (next) {}

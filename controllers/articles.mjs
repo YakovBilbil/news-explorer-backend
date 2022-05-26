@@ -42,8 +42,8 @@ const createArticle = async(req, res) => {
                 message: "invalid data passed to the methods for creating an article",
             });
         } else {
-            const newArticleToSend = newArticle.toObject()
-            delete newArticleToSend.owner
+            const newArticleToSend = newArticle.toObject();
+            delete newArticleToSend.owner;
             res.send(newArticleToSend);
         }
     } catch (error) {
@@ -53,7 +53,7 @@ const createArticle = async(req, res) => {
 
 const deleteArticleById = async(req, res) => {
     try {
-        const article = await Article.findOne({ _id: req.params.article_id });
+        const article = await Article.findOne({ _id: req.params.article_id }).select("owner");
         if (!article) {
             res.status(NOT_FOUND_ERROR).send({
                 message: "Article ID not found",
@@ -61,7 +61,9 @@ const deleteArticleById = async(req, res) => {
         } else {
             if (req.user._id === article.owner.toString()) {
                 const articleToDelete = await Article.findOneAndRemove({ _id: req.params.article_id });
-                res.send(articleToDelete);
+                const deletedArticleToSend = articleToDelete.toObject();
+                delete deletedArticleToSend.owner;
+                res.send(deletedArticleToSend);
             } else {
                 throw new AuthRequiredError("No user with matching ID found");
             }
