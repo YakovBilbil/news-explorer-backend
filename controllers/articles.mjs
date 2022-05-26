@@ -9,7 +9,7 @@ import {
 
 const getArticles = async(req, res) => {
     try {
-        const articles = await Article.find({});
+        const articles = await Article.find({ owner: req.user._id });
         res.send(articles);
     } catch (error) {
         handleCatchErrors(error, res);
