@@ -11,7 +11,8 @@
         "test": "jest",
         "lint": "npx eslint .",
         "dev": "nodemon app.mjs",
-        "start": "node app.mjs"
+        "start": "node app.mjs",
+        "serverdeploy": "scp -r -i ~/.ssh/id_rsavm3 ./package.json yakov_bilbil@34.70.44.188:/home/yakov_bilbil/news-explorer-backend"
     },
     "repository": {
         "type": "git",
@@ -22,7 +23,7 @@
     "bugs": {
         "url": "https://github.com/YakovBilbil/news-explorer-backend/issues"
     },
-    "homepage": "https://yakovbilbilproj15.students.nomoreparties.sbs/",
+    "homepage": "https://newsexploreryakov.students.nomoredomainssbs.ru/",
     "devDependencies": {
         "cross-env": "^7.0.3",
         "eslint": "^8.9.0",
