@@ -15,7 +15,6 @@ const allowedOrigins = [
     "https://www.newsexploreryakov.students.nomoredomainssbs.ru",
     "https://www.newsexploreryakov.students.nomoredomainssbs.ru",
     "https://api.newsexploreryakov.students.nomoredomainssbs.ru",
-    "https://localhost:3000/",
     "http://localhost:3000/",
     "https://34.70.44.188:3000"
 ]
