@@ -11,6 +11,15 @@ import 'dotenv/config';
 
 const { PORT = 3000 } = process.env;
 
+const allowedOrigins = [
+    "https://www.newsexploreryakov.students.nomoredomainssbs.ru",
+    "https://www.newsexploreryakov.students.nomoredomainssbs.ru",
+    "https://api.newsexploreryakov.students.nomoredomainssbs.ru",
+    "https://localhost:3000/",
+    "http://localhost:3000/",
+    "https://34.70.44.188:3000"
+]
+
 mongoose.connect(mongoServerAddress);
 
 const app = express();
@@ -23,7 +32,7 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-app.options('*', cors());
+app.options(allowedOrigins, cors());
 
 app.use(requestLogger);
 
